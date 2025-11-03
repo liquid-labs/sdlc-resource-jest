@@ -53,8 +53,7 @@ const config = {
   // An array of glob patterns indicating a set of files for which coverage information should be collected
   collectCoverageFrom : ['**/*.{js,cjs,mjs,jsx}'],
 
-  // The directory where Jest should output its coverage files
-  coverageDirectory : 'coverage',
+  // The coverage directory is specified in the unit or integration config files
 
   // An array of regexp pattern strings used to skip coverage collection
   coveragePathIgnorePatterns : [
@@ -178,11 +177,7 @@ const config = {
   // Adds a location field to test results
   // testLocationInResults: false,
 
-  // The glob patterns Jest uses to detect test files
-  testMatch : [
-    '**/__tests__/**/*.{js,mjs,cjs,jsx}',
-    '**/?(*.)+(spec|test).{js,mjs,cjs,jsx}'
-  ]
+  // The 'testMatch' property is set in the unit or integration config files
 
   // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
   // testPathIgnorePatterns: [
