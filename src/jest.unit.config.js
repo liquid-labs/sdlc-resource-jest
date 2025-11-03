@@ -1,10 +1,10 @@
-const config = require('./jest.config.js')
+const config = require('./jest.config')
 
 config.coverageDirectory = 'coverage'
 
 config.testMatch = [
-    // see note in jest.integration.config.js on test matching
-    '<rootDir>/**/*.test.{js,jsx,ts,tsx}'
+  // see note in jest.integration.config.js on test matching
+  '<rootDir>/**/*.test.{js,jsx,ts,tsx}'
 ]
 
 module.exports = config
