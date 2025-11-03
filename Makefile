@@ -6,7 +6,7 @@ SRC:=src
 DIST:=dist
 QA:=qa
 
-CONFIG_FILES_SRC:=$(SRC)/jest-snapshot-resolver.js $(SRC)/jest.config.js $(SRC)/fix-jsdom-environment.js
+CONFIG_FILES_SRC:=$(SRC)/jest-snapshot-resolver.js $(SRC)/jest.config.js $(SRC)/jest.unit.config.js $(SRC)/jest.integration.config.js $(SRC)/jest.integration.config.js $(SRC)/fix-jsdom-environment.js
 CONFIG_FILES_DIST:=$(patsubst $(SRC)/%, $(DIST)/%, $(CONFIG_FILES_SRC))
 
 ALL_JS_FILES_SRC:=$(shell find $(SRC) -name "*.js")
@@ -29,7 +29,7 @@ $(TEST_REPORT) $(TEST_PASS_MARKER) &: package.json $(ALL_JS_FILES_SRC)
 	( set -e; set -o pipefail; \
 		SRJ_CWD_REL_PACKAGE_DIR='.' \
 		$(JEST) \
-		--config $(SRC)/jest.config.js \
+		--config $(SRC)/jest.unit.config.js \
 		| tee -a $(TEST_REPORT); \
 		touch $(TEST_PASS_MARKER) )
 	@[[ -f coverage/coverage-final.json ]] \
