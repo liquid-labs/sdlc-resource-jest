@@ -2,14 +2,13 @@
 // https://jestjs.io/docs/en/configuration.html
 const fsPath = require('node:path')
 const readFileSync = require('node:fs').readFileSync
+const findRoot = require('find-root')
 
 let pkg
 if (process.env.SRJ_SKIP_PACKAGE_CUSTOMIZATIONS !== 'true') {
-  // we expect to execute from the 'test-staging' subdir, so we drop down one; otherwise, we look for
-  // SRJ_CWD_PACKAGE_DIR to tell us where to look
-  const packagePath = process.env.SRJ_CWD_REL_PACKAGE_DIR === undefined
-    ? fsPath.resolve(process.cwd(), '..', 'package.json')
-    : fsPath.resolve(process.env.SRJ_CWD_REL_PACKAGE_DIR, 'package.json')
+  // if 'SJR_CWD_REL_PACKAGE_DIR' is not defined, this defaults to 'process.cwd()' as the starting point
+  const packageDir = findRoot(process.env.SRJ_CWD_REL_PACKAGE_DIR)
+  const packagePath = fsPath.join(packageDir, 'package.json')
 
   try {
     const packageContents = readFileSync(packagePath, { encoding : 'utf8' })
@@ -24,10 +23,11 @@ if (process.env.SRJ_SKIP_PACKAGE_CUSTOMIZATIONS !== 'true') {
     }
   }
   catch (e) {
-    if (e.code === 'ENOENT') {
-      throw new Error(`"Could not locate '${packagePath}' to load package-level configuration customizations. By default, we look one direcotry belowe the current working directory (default is to run from './test-staging/'). Consider setting environment var 'SRJ_CWD_REL_PACKAGE_DIR' to set the directory of the package relative to the test process working dir (usually the package root directory; so set to '.' if 'package.json' is in the package root) or set 'SRJ_SKIP_PACKAGE_CUSTOMIZATIONS' to (the string) 'true' to skip loading package customizations altogether.`)
+    // oddly, 'findRoot()' does not throw an ENOENT exception, so we have to test the message
+    if (e.code !== 'ENOENT' && e.message.match(/not found/) === null) {
+      throw e
     }
-    else { throw e }
+    console.warn(`"Could not locate '${packagePath}' to load package-level configuration customizations. By default, we look one direcotry belowe the current working directory (default is to run from './test-staging/'). Consider setting environment var 'SRJ_CWD_REL_PACKAGE_DIR' to set the directory of the package relative to the test process working dir (usually the package root directory; so set to '.' if 'package.json' is in the package root) or set 'SRJ_SKIP_PACKAGE_CUSTOMIZATIONS' to (the string) 'true' to skip loading package customizations altogether.`)
   }
 } // if (process.env.SRJ_SKIP_PACKAGE_CUSTOMIZATIONS !== 'true')
 
