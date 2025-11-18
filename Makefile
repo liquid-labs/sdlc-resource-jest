@@ -6,7 +6,7 @@ SRC:=src
 DIST:=dist
 QA:=qa
 
-CONFIG_FILES_SRC:=$(SRC)/jest-snapshot-resolver.js $(SRC)/jest.config.js $(SRC)/jest.unit.config.js $(SRC)/jest.integration.config.js $(SRC)/jest.integration.config.js $(SRC)/fix-jsdom-environment.js
+CONFIG_FILES_SRC:=$(SRC)/jest-snapshot-resolver.js $(SRC)/jest.config.js $(SRC)/jest.unit.config.js $(SRC)/jest.integration.config.js $(SRC)/fix-jsdom-environment.js
 CONFIG_FILES_DIST:=$(patsubst $(SRC)/%, $(DIST)/%, $(CONFIG_FILES_SRC))
 
 ALL_JS_FILES_SRC:=$(shell find $(SRC) -name "*.js")
